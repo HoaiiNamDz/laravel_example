@@ -3,11 +3,19 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\DistrictRepositoryInterface;
+use App\Repositories\BaseRepository;
 use App\Models\District;
 
-class DistrictRepository implements DistrictRepositoryInterface
+class DistrictRepository extends BaseRepository implements DistrictRepositoryInterface
 {
-    public function all() {
-        return District::all();
+    protected $model;
+
+    public function __construct(
+        District $model
+    ) {
+        $this->model = $model;
+    }
+    public function findDistrictsByProvinceId(int $province_id = 0) {
+        return $this->model->where('province_code', '=', $province_id)->get();
     }
 }

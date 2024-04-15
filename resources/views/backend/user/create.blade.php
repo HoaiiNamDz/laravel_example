@@ -109,17 +109,20 @@
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="province">Thành phố</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="" id="province" class="form-control">
-                                        <option value="0">[Chọn Thành Phố]</option>
-                                        <option value="1">Hà Nội</option>
+                                    <select name="" id="province" class="form-control setupSelect2 provinces">
+                                        <option value="0">[Chọn Thành phố]</option>
+                                        @if(isset($provinces))
+                                            @foreach ($provinces as $province)
+                                            <option value="{{ $province->code }}">{{ $province->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="ward">Phườnh/Xã</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="" id="ward" class="form-control">
-                                        <option value="0">[Chọn Phườnh/Xã]</option>
-                                        <option value="1">Yên Phụ</option>
+                                    <select name="" id="ward" class="form-control wards setupSelect2">
+                                        <option value="0">[Chọn Phường/Xã]</option>
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
@@ -136,9 +139,8 @@
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="district">Quận/Huyện</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="" id="district" class="form-control">
+                                    <select name="" id="district" class="form-control districts setupSelect2">
                                         <option value="0">[Chọn Quận/Huyện]</option>
-                                        <option value="1">Tây Hồ</option>
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">

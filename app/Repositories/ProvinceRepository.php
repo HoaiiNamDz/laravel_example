@@ -3,11 +3,16 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\ProvinceRepositoryInterface;
+use App\Repositories\BaseRepository;
 use App\Models\Province;
 
-class ProvinceRepository implements ProvinceRepositoryInterface
+class ProvinceRepository extends BaseRepository implements ProvinceRepositoryInterface
 {
-   public function all() {
-      return Province::all();
+   protected $model;
+
+   public function __construct(
+      Province $model
+   ) {
+      $this->model = $model;
    }
 }
