@@ -4,43 +4,30 @@
     var document = $(document)
 
     HT.location = () => [
-        $('.provinces').on('change', function() {
-            let province_id = $(this).val();
-            $.ajax({
-                url: 'ajax/location/getLocation',
-                type: 'GET',
-                data: {
-                    'province_id': province_id
+        $('.location').on('change', function() {
+            let options = {
+                'data': {
+                    'location_id' : $(this).val()
                 },
-                dataType: 'json',
-                success: function(res) {
-                    $('.districts').html(res.html)
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log('Lỗi ' + textStatus + ' ' + errorThrown);
-                }
-            })
+                'target': $(this).attr('data-target')
+            }
+            HT.sendDataToGetLocation(options);
         }),
-        $('.districts').on('change', function() {
-            let district_id = $(this).val();
-            $.ajax({
-                url: 'ajax/location/getLocation',
-                type: 'GET',
-                data: {
-                    'district_id': district_id
-                },
-                dataType: 'json',
-                success: function(res) {
-                    console.log(res);
-                    $('.wards').html(res.html)
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.log('Lỗi ' + textStatus + ' ' + errorThrown);
-                }
-            })
-        }),
-    ]
-
+    ];
+    HT.sendDataToGetLocation = (options) => {
+        $.ajax({
+            url: 'ajax/location/getLocation',
+            type: 'GET',
+            data: options,
+            dataType: 'json',
+            success: function(res) {
+                $('.' + options.target).html(res.html)
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log('Lỗi ' + textStatus + ' ' + errorThrown);
+            }
+        })
+    } 
     document.ready(function() {
         HT.location();
     })

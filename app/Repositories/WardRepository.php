@@ -15,7 +15,4 @@ class WardRepository extends BaseRepository implements WardRepositoryInterface
     ) {
         $this->model = $model;
     }
-    public function findWardsByDistrictId(int $district_id = 0 ) {
-        return $this->model->where('district_code', '=', $district_id)->get();
-    }
 }

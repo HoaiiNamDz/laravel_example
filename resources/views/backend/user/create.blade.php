@@ -1,6 +1,15 @@
 @include('backend.dashboard.component.breadcrumb', ['title' => $config['seo']['create']['title']])
-
-<form action="" method="">
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+<form action="{{route('user.store')}}" method="post">
+    @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-5">
@@ -24,13 +33,14 @@
                                     <input  type="email" 
                                             name="email" 
                                             id="email"
+                                            value="{{old('email')}}"
                                             class="form-control"
                                     >
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="group_user">Nhóm thành viên</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="" id="group_user" class="form-control">
+                                    <select name="group_user" id="group_user" class="form-control setupSelect2">
                                         <option value="0">[Chọn nhóm thành viên]</option>
                                         <option value="1">Quản trị viên</option>
                                     </select>
@@ -52,6 +62,7 @@
                                     <input  type="text" 
                                             name="name" 
                                             id="name"
+                                            value="{{old('name')}}"
                                             class="form-control"
                                     >
                                 </div>
@@ -61,6 +72,7 @@
                                     <input  type="date" 
                                             name="birthday" 
                                             id="birthday"
+                                            value="{{old('birthday')}}"
                                             class="form-control"
                                     >
                                 </div>
@@ -77,11 +89,10 @@
                             <div class="col-lg-12">
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="avatar">Ảnh đại diện</label>
-                                    <span class="text-danger">(*)</span>
                                     <input  type="file" 
                                             name="avatar" 
                                             id="avatar"
-                                            class="form-control"
+                                            class="form-control avatar"
                                     >
                                 </div>
                             </div>
@@ -108,29 +119,27 @@
                             <div class="col-lg-6">
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="province">Thành phố</label>
-                                    <span class="text-danger">(*)</span>
-                                    <select name="" id="province" class="form-control setupSelect2 provinces">
+                                    <select name="" id="province" class="form-control setupSelect2 location province" data-target="districts">
                                         <option value="0">[Chọn Thành phố]</option>
                                         @if(isset($provinces))
                                             @foreach ($provinces as $province)
-                                            <option value="{{ $province->code }}">{{ $province->name }}</option>
+                                            <option @if(old('province_id') == $province->code) selected @endif value="{{ $province->code }}">{{ $province->name }}</option>
                                             @endforeach
                                         @endif
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
-                                    <label for="ward">Phườnh/Xã</label>
-                                    <span class="text-danger">(*)</span>
+                                    <label for="ward">Phường/Xã</label>
                                     <select name="" id="ward" class="form-control wards setupSelect2">
                                         <option value="0">[Chọn Phường/Xã]</option>
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="phone">Số điện thoại</label>
-                                    <span class="text-danger">(*)</span>
                                     <input  type="text" 
                                             name="phone" 
                                             id="phone"
+                                            value="{{old('phone')}}"
                                             class="form-control"
                                     >
                                 </div>
@@ -138,17 +147,16 @@
                             <div class="col-lg-6">
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="district">Quận/Huyện</label>
-                                    <span class="text-danger">(*)</span>
-                                    <select name="" id="district" class="form-control districts setupSelect2">
+                                    <select name="" id="district" class="form-control districts setupSelect2 location" data-target="wards">
                                         <option value="0">[Chọn Quận/Huyện]</option>
                                     </select>
                                 </div>
                                 <div class="form-row" style="margin-bottom: 20px">
                                     <label for="address">Địa chỉ</label>
-                                    <span class="text-danger">(*)</span>
                                     <input  type="text" 
                                             name="address" 
                                             id="address"
+                                            value="{{old('address')}}"
                                             class="form-control"
                                     >
                                 </div>
@@ -157,6 +165,7 @@
                                     <input  type="text" 
                                             name="description" 
                                             id="description"
+                                            value="{{old('description')}}"
                                             class="form-control"
                                     >
                                 </div>

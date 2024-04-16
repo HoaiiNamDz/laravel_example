@@ -5,49 +5,43 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Repositories\Interfaces\DistrictRepositoryInterface as DistricRepository;
-use App\Repositories\Interfaces\WardRepositoryInterface as WardRepository;
+use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 
 class LocationController extends Controller
 {
     protected $districtRepository;
-    protected $wardRepository;
+    protected $provinceRepository;
 
     public function __construct(
         DistricRepository $districtRepository,
-        WardRepository $wardRepository
+        ProvinceRepository $provinceRepository
     )
     {
         $this->districtRepository = $districtRepository;
-        $this->wardRepository = $wardRepository;
+        $this->provinceRepository = $provinceRepository;
     }
 
     public function getLocation(Request $request) {
-        $province_id = (int) $request->input('province_id');
-        $districts = $this->districtRepository->findDistrictsByProvinceId($province_id);
-
-        $district_id = (int) $request->input('district_id');
-        $wards = [];
-        if ($district_id) {
-            $wards = $this->wardRepository->findWardsByDistrictId($district_id);
+        $get = $request->input();
+        $html = '';
+        if($get['target'] == 'districts') {
+            $provinces = $this->provinceRepository->findById($get['data']['location_id'], ['code','name'], ['districts']);
+            $html = $this->renderHtml($provinces->districts);
+        } else if($get['target'] == 'wards') {
+            $districts = $this->districtRepository->findById($get['data']['location_id'], ['code','name'], ['wards']);
+            $html = $this->renderHtml($districts->wards, '[Chọn Phường/Xã]');
         }
-
         $response = [
-            'html' => $this->renderHtml($districts, $wards) 
+            'html' => $html
         ];
         return response()->json($response);
     }
 
-    public function renderHtml($districts, $wards) {
-        $html = '<option value="0">[Chọn Quận/Huyện]</option>';
+    public function renderHtml($districts, $root = '[Chọn Quận/Huyện]') {
+        $html = '<option value="0">'.$root.'</option>';
         foreach ($districts as $district) {
             $html .= '<option value="'.$district->code.'">'.$district->name.'</option>';
         };
-        if (!empty($wards)) {
-            $html = '<option value="0">[Chọn Phường/Xã]</option>';
-            foreach ($wards as $ward) {
-                $html .= '<option value="'.$ward->code.'">'.$ward->name.'</option>';
-            }
-        }
         return $html;
     }
 }
